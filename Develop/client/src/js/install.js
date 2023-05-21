@@ -1,11 +1,28 @@
 const butInstall = document.getElementById('buttonInstall');
 
 // Logic for installing the PWA
-// TODO: Add an event handler to the `beforeinstallprompt` event
-window.addEventListener('beforeinstallprompt', (event) => {});
+window.addEventListener('beforeinstallprompt', (event) => {
+  // Prompt the user to install the PWA
+  event.prompt();
+});
 
-// TODO: Implement a click event handler on the `butInstall` element
-butInstall.addEventListener('click', async () => {});
+butInstall.addEventListener('click', async () => {
+  // Handle the click event on the install button
+  const promptEvent = await window.deferredPrompt;
 
-// TODO: Add an handler for the `appinstalled` event
-window.addEventListener('appinstalled', (event) => {});
+  if (promptEvent) {
+    promptEvent.prompt();
+    const result = await promptEvent.userChoice;
+    if (result.outcome === 'accepted') {
+      console.log('PWA installed successfully!');
+    } else {
+      console.log('PWA installation canceled.');
+    }
+    window.deferredPrompt = null;
+  }
+});
+
+window.addEventListener('appinstalled', (event) => {
+  // Handle the app installed event
+  console.log('PWA installed!');
+});
